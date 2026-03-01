@@ -1,0 +1,14 @@
+# From direnv 
+.envrc
+.direnv
+
+# Makefile build dir
+bin/
+build/
+
+# Nix result binary
+result/
+
+# Bear needed files
+.cache
+compile_commands.json

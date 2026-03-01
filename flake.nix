@@ -33,7 +33,7 @@
         ];
 
         # here goes the name of your binary
-        bin = "";
+        bin = "clang_base_dev_flake";
 
       in
       {
@@ -47,6 +47,8 @@
 
           buildPhase = ''
             runHook preBuild
+
+            export BIN_NAME=${bin}
 
             make dir
             make build
@@ -76,7 +78,7 @@
               lldb
             ]);
 
-          shellHook = "export BIN_NAME ${bin}";
+          shellHook = "export BIN_NAME=${bin}";
         };
       }
     );
