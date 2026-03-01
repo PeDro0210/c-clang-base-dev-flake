@@ -1,4 +1,4 @@
-# Rust Base Dev Flake
+# Clang for c Dev Flake
 
 A nix flake for setting up nix devshels and package with clang standard derivation
 
