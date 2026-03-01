@@ -1,5 +1,5 @@
 # From direnv 
-.envrc
+# .envrc (remove it if needed)
 .direnv
 
 # Makefile build dir

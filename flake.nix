@@ -21,6 +21,7 @@
 
         nativeBuildInputs = with pkgs; [
           pkg-config
+          # lsp support for Makefile
           autotools-language-server
         ];
 
@@ -29,7 +30,7 @@
         ];
 
         buildInputs = with pkgs; [
-          libcxx
+          libc
         ];
 
         # here goes the name of your binary
@@ -72,10 +73,10 @@
             buildInputs
             ++ nativeBuildInputs
             ++ (with pkgs; [
+              # for setting up compile_commands
               bear
+              # various utilities
               clang-tools
-              valgrind
-              lldb
             ]);
 
           shellHook = "export BIN_NAME=${bin}";
