@@ -76,7 +76,7 @@
             ++ nativeBuildInputs
             ++ (with pkgs; [
               # for setting up compile_commands
-              bear
+              compiledb
               # various utilities
               clang-tools
             ]);
