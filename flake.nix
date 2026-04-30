@@ -68,6 +68,8 @@
 
         };
 
+        templates.default.path = ./.;
+
         devShell = pkgs.mkShell {
           packages =
             buildInputs
