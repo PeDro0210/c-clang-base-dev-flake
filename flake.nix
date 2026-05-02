@@ -1,88 +1,103 @@
 {
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+  description = "A nix flake for c proyects and environment";
 
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
     {
-      self,
-      nixpkgs,
-      flake-utils,
+      flake-parts,
       ...
-    }:
+    }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
 
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
 
-        nativeBuildInputs = with pkgs; [
-          pkg-config
-          # lsp support for Makefile
-          autotools-language-server
-        ];
-
-        packages = with pkgs; [
-          makeWrapper
-        ];
-
-        buildInputs = with pkgs; [
-          libc
-        ];
-
-        # here goes the name of your binary
-        bin = "clang_base_dev_flake";
-
-      in
-      {
-
-        packages.default = pkgs.clangStdenv.mkDerivation {
-          name = "${bin}";
-          src = ./.;
-          inherit buildInputs nativeBuildInputs;
-
-          packages = packages;
-
-          buildPhase = ''
-            runHook preBuild
-
-            export BIN_NAME=${bin}
-
-            make dir
-            make build
-
-            runHook postBuild
-          '';
-
-          installPhase = ''
-            runHook preInstall
-
-            mkdir -p $out/bin
-            cp -ra bin/* $out/bin
-
-            runHook postInstall
-          '';
-
-        };
-
+      flake = {
         templates.default.path = ./.;
+      };
 
-        devShell = pkgs.mkShell {
-          packages =
-            buildInputs
-            ++ nativeBuildInputs
-            ++ (with pkgs; [
-              # for setting up compile_commands
-              compiledb
-              # various utilities
-              clang-tools
-            ]);
+      perSystem =
+        {
+          config,
+          self',
+          inputs',
+          pkgs,
+          system,
+          ...
+        }:
+        let
 
-          shellHook = "export BIN_NAME=${bin}";
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+            # lsp support for Makefile
+            autotools-language-server
+          ];
+
+          packages = with pkgs; [
+            makeWrapper
+          ];
+
+          buildInputs = with pkgs; [
+            libc
+          ];
+
+          # here goes the name of your binary
+          bin = "clang_base_dev_flake";
+
+        in
+        {
+
+          packages.default = pkgs.clangStdenv.mkDerivation {
+            name = "${bin}";
+            src = ./.;
+            inherit buildInputs nativeBuildInputs;
+
+            packages = packages;
+
+            buildPhase = ''
+              runHook preBuild
+
+              export BIN_NAME=${bin}
+
+              make dir
+              make build
+
+              runHook postBuild
+            '';
+
+            installPhase = ''
+              runHook preInstall
+
+              mkdir -p $out/bin
+              cp -ra bin/* $out/bin
+
+              runHook postInstall
+            '';
+
+          };
+
+          devShells = pkgs.mkShell {
+            packages =
+              buildInputs
+              ++ nativeBuildInputs
+              ++ (with pkgs; [
+                # for setting up compile_commands
+                compiledb
+                # various utilities
+                clang-tools
+              ]);
+
+            shellHook = "export BIN_NAME=${bin}";
+          };
+
         };
-      }
-    );
+
+    };
 }
