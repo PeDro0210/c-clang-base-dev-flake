@@ -9,6 +9,6 @@ build/
 # Nix result binary
 result/
 
-# Bear needed files
+# for clangd
 .cache
 compile_commands.json
