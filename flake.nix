@@ -35,6 +35,7 @@
         let
 
           nativeBuildInputs = with pkgs; [
+            compiledb
             pkg-config
             # lsp support for Makefile
             autotools-language-server
@@ -57,9 +58,7 @@
           packages.default = pkgs.clangStdenv.mkDerivation {
             name = "${bin}";
             src = ./.;
-            inherit buildInputs nativeBuildInputs;
-
-            packages = packages;
+            inherit buildInputs nativeBuildInputs packages;
 
             buildPhase = ''
               runHook preBuild
@@ -81,20 +80,6 @@
               runHook postInstall
             '';
 
-          };
-
-          devShells = pkgs.mkShell {
-            packages =
-              buildInputs
-              ++ nativeBuildInputs
-              ++ (with pkgs; [
-                # for setting up compile_commands
-                compiledb
-                # various utilities
-                clang-tools
-              ]);
-
-            shellHook = "export BIN_NAME=${bin}";
           };
 
         };
