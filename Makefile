@@ -22,6 +22,3 @@ clean:
 dir:
 	find $(SRC_DIR) -type d | xargs -I{} mkdir -p $(BUILD_DIR)/{}
 	mkdir -p $(BIN_DIR)
-
-compile_commands:
-	compiledb make

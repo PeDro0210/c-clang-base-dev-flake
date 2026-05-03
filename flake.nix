@@ -39,9 +39,6 @@
             pkg-config
             # lsp support for Makefile
             autotools-language-server
-          ];
-
-          packages = with pkgs; [
             makeWrapper
           ];
 
@@ -58,7 +55,9 @@
           packages.default = pkgs.clangStdenv.mkDerivation {
             name = "${bin}";
             src = ./.;
-            inherit buildInputs nativeBuildInputs packages;
+
+            BIN_NAME = bin;
+            inherit buildInputs nativeBuildInputs;
 
             buildPhase = ''
               runHook preBuild
