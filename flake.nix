@@ -34,12 +34,7 @@
         let
 
           nativeBuildInputs = with pkgs; [
-            compiledb
             pkg-config
-
-            autotools-language-server
-            makeWrapper
-
           ];
 
           buildInputs = with pkgs; [
@@ -85,8 +80,11 @@
             inherit nativeBuildInputs buildInputs;
             packages = with pkgs; [
               clang-tools
-              compiledb
               lldb
+
+              compiledb
+              makeWrapper
+              autotools-language-server
             ];
 
             BIN_NAME = bin;
