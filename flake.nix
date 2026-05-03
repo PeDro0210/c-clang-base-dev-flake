@@ -1,5 +1,4 @@
 {
-
   description = "A nix flake for c projects and environment";
 
   inputs = {
@@ -37,9 +36,10 @@
           nativeBuildInputs = with pkgs; [
             compiledb
             pkg-config
-            # lsp support for Makefile
+
             autotools-language-server
             makeWrapper
+
           ];
 
           buildInputs = with pkgs; [
@@ -53,11 +53,11 @@
         {
 
           packages.default = pkgs.clangStdenv.mkDerivation {
+            inherit buildInputs nativeBuildInputs;
             name = "${bin}";
             src = ./.;
 
             BIN_NAME = bin;
-            inherit buildInputs nativeBuildInputs;
 
             buildPhase = ''
               runHook preBuild
@@ -81,6 +81,16 @@
 
           };
 
+          devShells.default = pkgs.mkShell {
+            inherit nativeBuildInputs buildInputs;
+            packages = with pkgs; [
+              clang-tools
+              compiledb
+              lldb
+            ];
+
+            BIN_NAME = bin;
+          };
         };
 
     };
