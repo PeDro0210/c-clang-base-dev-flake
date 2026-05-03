@@ -1,6 +1,6 @@
 {
 
-  description = "A nix flake for c proyects and environment";
+  description = "A nix flake for c projects and environment";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
